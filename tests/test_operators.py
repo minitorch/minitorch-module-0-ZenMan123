@@ -107,16 +107,20 @@ def test_sigmoid(a: float) -> None:
     * It crosses 0 at 0.5
     * It is  strictly increasing.
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    sig = sigmoid(a)
+    assert 0.0 <= sig <= 1.0
+    assert_close(1.0 - sig, sigmoid(-a))
+    assert_close(sigmoid(0.0), 0.5)
+    eps = 1e-2
+    assert sigmoid(a - eps) <= sig <= sigmoid(a + eps)
 
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats, small_floats)
 def test_transitive(a: float, b: float, c: float) -> None:
     """Test the transitive property of less-than (a < b and b < c implies a < c)"""
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    if lt(a, b) and lt(b, c):
+        assert lt(a, c)
 
 
 @pytest.mark.task0_2
@@ -124,8 +128,9 @@ def test_symmetric() -> None:
     """Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
     gives the same value regardless of the order of its input.
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    samples = [(2.0, -3.0), (-1.5, 4.2), (0.0, 7.5), (5.0, 5.0)]
+    for x, y in samples:
+        assert_close(mul(x, y), mul(y, x))
 
 
 @pytest.mark.task0_2
@@ -133,15 +138,25 @@ def test_distribute() -> None:
     r"""Write a test that ensures that your operators distribute, i.e.
     :math:`z \times (x + y) = z \times x + z \times y`
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    samples = [
+        (2.0, -3.0, 4.0),
+        (-1.5, 0.5, -2.5),
+        (0.0, 3.3, -1.2),
+        (4.5, 6.0, 7.0),
+    ]
+    for z, x, y in samples:
+        left = mul(z, add(x, y))
+        right = add(mul(z, x), mul(z, y))
+        assert_close(left, right)
 
 
 @pytest.mark.task0_2
 def test_other() -> None:
     """Write a test that ensures some other property holds for your functions."""
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    samples = [-10.0, -1.5, 0.0, 3.7, 42.0]
+    for value in samples:
+        assert_close(add(value, neg(value)), 0.0)
+        assert_close(neg(neg(value)), value)
 
 
 # ## Task 0.3  - Higher-order functions
